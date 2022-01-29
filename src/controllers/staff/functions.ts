@@ -1,5 +1,4 @@
 import Staff, { IStaff } from '../../models/staff';
-//import {IExpense} from '../../models/expense';
 import jwt from 'jsonwebtoken';
 import { tokenSecret, tokenExpire } from '../../config/jwt';
 
@@ -29,13 +28,3 @@ export const verifyToken = async (token: string): Promise<null | IStaff> => {
     const staff = await Staff.findById(decoded.id).exec();
     return staff;
 }
-
-// exports.getAll =  async():Promise<Array<IStaff>> => {
-//     const staff =  await Staff.find();
-//     return staff;
-// }
-
-// exports.getStaff =  async(staff_no: string): Promise<IStaff|null> => {
-//     const staff = await Staff.findOne({staff_no: staff_no}).exec();
-//     return staff;
-// }
