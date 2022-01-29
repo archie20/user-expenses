@@ -65,6 +65,11 @@ const login: Array<RequestHandler> = [
     try {
       const { staff_no, password } = req.body;
       const token = await staffFunctions.login(staff_no, password);
+      if(!token) {
+          return res
+              .status(401)
+              .json({ message: "Wrong password or staff number"});
+      }
       return res
         .status(200)
         .json({ message: "Successful login", token: token });
@@ -159,7 +164,7 @@ const getAllExpenses: RequestHandler = async (req: Request, res: Response) => {
       req.body.token || req.query.token || req.headers["x-access-token"];
     const admin = await verifyToken(token);
     if (admin) {
-      const staff = await Staff.findOne({ staff_no: req.params.num });
+      const staff = await Staff.findOne({ staff_no: req.params.num }).exec();
       if (!staff) {
         return res.status(404).json({ message: "Staff not found" });
       }
@@ -168,6 +173,7 @@ const getAllExpenses: RequestHandler = async (req: Request, res: Response) => {
         .json({ message: "Expenses", expenses: staff.expenses });
     } else {
       const staff = await staffFunctions.verifyToken(token);
+      console.log(staff);
       if (!staff) {
         return res.status(403).json({ message: "Unauthorized" });
       }
