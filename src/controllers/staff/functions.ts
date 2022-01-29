@@ -31,9 +31,7 @@ export const login = async (
 };
 
 export const verifyToken = async (token: string): Promise<null | IStaff> => {
-  const decoded = jwt.verify(token, tokenSecret, {
-    complete: true,
-  }) as jwt.JwtPayload;
+  const decoded = jwt.verify(token, tokenSecret) as jwt.JwtPayload;
   if (!decoded) {
     return null;
   }
